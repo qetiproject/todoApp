@@ -29,7 +29,7 @@
      <ion-item>
       <ion-card-content class="fullwidth ion-justify-content-between" style="display: flex; padding: 0;">
         {{data.content}}
-        <ion-icon name="trash-outline" (click)="removeData(data)"></ion-icon>
+        <ion-icon name="trash-outline" color="danger" (click)="removeData(data)"></ion-icon>
       </ion-card-content>
      </ion-item>
     </ion-card>
@@ -50,7 +50,7 @@
     </ion-card>
   </ion-list>
 
-  <form [formGroup]="addItem">
+  <form [formGroup]="addItem" class="ion-padding-top">
     <ion-title>Add new item</ion-title>
     <div class="inputBorder" style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
       <ion-input

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { AlertController } from '@ionic/angular';
 import { Data } from '../shared/models/data';
 import { DataService } from '../shared/services/data.service';
 
@@ -14,13 +14,13 @@ export class HomePage  implements OnInit{
   dataList: Data[] = [];
   filteredData: Data[] = [];
   data: Data;
-  jsonStr: any;
   inputText: string = "";
   enteredText: string = "";
   isFiltered: boolean = false;
   dataId: number = null;
 
   constructor(
+    public alertController: AlertController,
     private dataService: DataService
   ) {}
 
@@ -38,7 +38,6 @@ export class HomePage  implements OnInit{
 
   getDataList() {
     this.dataService.getDataList().subscribe( res => {
-      this.jsonStr = res;
       this.dataList = res.list;
     })
   }
@@ -55,7 +54,6 @@ export class HomePage  implements OnInit{
     if(this.addItem.valid) {
       this.dataList.push(this.data);
     }
-
   }
 
   filterData(enteredText: string) {
@@ -72,7 +70,24 @@ export class HomePage  implements OnInit{
   }
 
   removeData(data: Data) {
-    this.dataList = this.dataList.filter(item => item != data);
+    this.presentAlertMultipleButtons(data);
+  }
+
+  async presentAlertMultipleButtons(data: Data) {
+    await this.alertController.create({
+      header: "Are you share?",
+      message: `You are about to delete item ${data.id}`,
+      buttons: [
+        {
+          text: "cancel",
+        },
+        {
+          text: "delete", handler: (res) => {
+            this.dataList = this.dataList.filter(item => item != data);
+          }
+        }
+      ]
+    }).then(res => res.present());
   }
 
 }
